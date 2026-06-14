@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>THE GRIND — 14-Day Training</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div id="fx-layer"></div>
+  <div id="flash"></div>
+
+  <!-- ===== TOP BAR ===== -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-block">THE</span><span class="brand-blaze">GRIND</span>
+      <span class="brand-sub">14-day program</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab active" data-view="today">Today</button>
+      <button class="tab" data-view="stats">Stats</button>
+    </nav>
+    <div class="controls">
+      <div class="streak-chip" title="Day streak">
+        <span class="flame">🔥</span><span id="streak-mini">0</span>
+      </div>
+      <button id="sound-toggle" class="ico" aria-label="Toggle sound"><span id="sound-icon">🔊</span></button>
+      <button id="theme-btn" class="ico theme-btn" aria-label="Change theme"><span class="theme-dot"></span></button>
+      <div id="theme-pop" class="theme-pop">
+        <h4>Theme</h4>
+        <div id="theme-list"></div>
+      </div>
+      <button id="reset-btn" class="ico" aria-label="Reset progress">⟲</button>
+    </div>
+  </header>
+
+  <!-- ===== TODAY ===== -->
+  <main id="view-today" class="view active">
+    <section class="hero">
+      <div class="ring-wrap">
+        <svg class="ring" viewBox="0 0 200 200" aria-hidden="true">
+          <circle class="ring-track" cx="100" cy="100" r="86"></circle>
+          <circle id="ring-arc" class="ring-arc" cx="100" cy="100" r="86"></circle>
+        </svg>
+        <div class="ring-center">
+          <span id="ring-pct" class="ring-pct">0<small>%</small></span>
+          <span id="ring-count" class="ring-count">0 / 12 DONE</span>
+        </div>
+      </div>
+
+      <div class="hero-info">
+        <span class="eyebrow"><b id="day-badge">DAY 1 / 14</b> · TODAY'S SESSION</span>
+        <h1 class="rank-line"><span id="rank-title">Rookie</span><span class="lvl-tag">LVL <i id="level-num">1</i></span></h1>
+
+        <div class="power">
+          <div id="xp-fill" class="power-fill"></div>
+          <span id="xp-text" class="power-text">0 / 0 XP</span>
+        </div>
+
+        <div class="chips">
+          <div class="chip"><span class="chip-val" id="stat-kcal">0</span><span class="chip-key">KCAL TODAY</span></div>
+          <div class="chip"><span class="chip-val" id="stat-done">0/12</span><span class="chip-key">EXERCISES</span></div>
+          <div class="chip"><span class="chip-val" id="stat-streak">0</span><span class="chip-key">DAY STREAK</span></div>
+        </div>
+
+        <p id="hype" class="hype"></p>
+        <p id="status-line" class="status">Let's move. Knock out your first exercise.</p>
+      </div>
+    </section>
+
+    <section class="session" id="session"></section>
+  </main>
+
+  <!-- ===== STATS ===== -->
+  <main id="view-stats" class="view">
+    <div class="stat-grid">
+      <section class="card wide">
+        <h2 class="card-title">Activity <span>last 8 weeks</span></h2>
+        <div id="heatmap" class="heatmap"></div>
+        <div class="heat-legend"><span>rest</span><i class="hk h0"></i><i class="hk h1"></i><i class="hk h2"></i><i class="hk h3"></i><i class="hk h4"></i><span>full</span></div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">This Week <span>exercises / day</span></h2>
+        <div id="weekly-chart" class="bars"></div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Calories <span>last 7 days</span></h2>
+        <canvas id="kcal-chart" class="line" width="520" height="220"></canvas>
+      </section>
+
+      <section class="card wide">
+        <h2 class="card-title">30-Day Trend <span>completion %</span></h2>
+        <canvas id="trend-chart" class="line" width="1080" height="240"></canvas>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Streaks</h2>
+        <div class="streak-readout">
+          <div><span id="cur-streak" class="big">0</span><small>current</small></div>
+          <div><span id="best-streak" class="big">0</span><small>best</small></div>
+          <div><span id="active-days" class="big">0</span><small>days trained</small></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Totals</h2>
+        <ul class="totals" id="totals-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2 class="card-title">Weigh-In <span>kg</span></h2>
+        <div class="weigh">
+          <div class="weigh-now">
+            <span id="weigh-latest" class="big">—</span>
+            <small id="weigh-delta">log your weight to track it</small>
+          </div>
+          <canvas id="weigh-spark" class="spark" width="320" height="80"></canvas>
+        </div>
+        <div class="weigh-input">
+          <input id="weigh-val" type="number" inputmode="decimal" step="0.1" placeholder="e.g. 68.5" aria-label="Weight in kg" />
+          <button id="weigh-log">Log</button>
+        </div>
+      </section>
+
+      <section class="card wide">
+        <h2 class="card-title">Achievements</h2>
+        <div id="achv-grid" class="achv-grid"></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===== EXERCISE SHEET ===== -->
+  <div id="sheet" class="sheet-wrap" aria-hidden="true">
+    <div class="sheet-backdrop" data-close></div>
+    <div class="sheet" role="dialog" aria-modal="true">
+      <button class="sheet-x" data-close aria-label="Close">✕</button>
+      <span class="sheet-tag" id="s-tag">STRENGTH</span>
+      <h2 class="sheet-title" id="s-title">PUSH-UPS</h2>
+      <p class="sheet-detail" id="s-detail"></p>
+      <div class="sheet-spec">
+        <div><b id="s-sets">3</b><small>SETS</small></div>
+        <div><b id="s-reps">12</b><small>EACH</small></div>
+        <div><b id="s-xp">+150</b><small>XP</small></div>
+        <div><b id="s-kcal">55</b><small>KCAL</small></div>
+      </div>
+      <div class="sheet-proto"><span>HOW TO</span><ul id="s-proto"></ul></div>
+
+      <div class="set-track" id="set-track" hidden>
+        <span class="st-label">TAP EACH SET</span>
+        <div class="set-dots" id="set-dots"></div>
+      </div>
+
+      <div class="timer-block">
+        <div class="timer" id="timer">
+          <svg viewBox="0 0 120 120" class="timer-ring" aria-hidden="true">
+            <circle class="tr-track" cx="60" cy="60" r="52"></circle>
+            <circle id="tr-arc" class="tr-arc" cx="60" cy="60" r="52"></circle>
+          </svg>
+          <div class="timer-center">
+            <span id="timer-time">1:00</span>
+            <span id="timer-lbl" class="timer-lbl">TIMER</span>
+          </div>
+        </div>
+        <div class="timer-ctrl">
+          <div class="tm-presets" id="tm-presets"></div>
+          <div class="tm-buttons">
+            <button id="tm-start" class="tm-go">Start</button>
+            <button id="tm-reset" class="tm-reset">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <button class="do-btn" id="do-btn">DONE — LOG IT</button>
+      <button class="undo-btn" id="undo-btn" hidden>Mark as not done</button>
+    </div>
+  </div>
+
+  <!-- ===== ACHIEVEMENT TOAST ===== -->
+  <div id="achv-toast" class="achv-toast" aria-hidden="true">
+    <span class="at-ic" id="at-ic">🏆</span>
+    <div class="at-body"><span class="at-tag">ACHIEVEMENT</span><strong id="at-title"></strong><span id="at-desc" class="at-desc"></span></div>
+  </div>
+
+  <!-- ===== FULL-SESSION CELEBRATION ===== -->
+  <div id="celebrate" class="celebrate" aria-hidden="true">
+    <div class="cel-inner">
+      <span class="cel-big">SESSION<br>DONE</span>
+      <span class="cel-sub">All 12 cleared. Beast mode. 🔥</span>
+    </div>
+  </div>
+
+  <script src="./missions.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
